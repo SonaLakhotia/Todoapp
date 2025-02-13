@@ -1,0 +1,48 @@
+<h2 class="text-2xl font-bold mb-4">{{ title }}</h2>
+  <form>
+    <div class="mb-4">
+      <label class="block text-gray-700 font-medium">Task Title</label>
+      <input type="text" [(ngModel)]="task.title" name="title" placeholder="Enter task title" 
+              class="w-full p-2 border border-gray-300 rounded">
+    </div>
+
+    <div class="mb-4">
+      <label class="block text-gray-700 font-medium">Description</label>
+      <textarea placeholder="Enter task description" [(ngModel)]="task.description" name="description" 
+                class="w-full p-2 border border-gray-300 rounded"></textarea>
+    </div>
+
+    <div class="mb-4">
+      <label class="block text-gray-700 font-medium">Tags (comma-separated)</label>
+      <input type="text" placeholder="e.g. Work, Personal" [(ngModel)]="task.tags" name="tags" 
+              class="w-full p-2 border border-gray-300 rounded">
+    </div>
+
+    <div class="mb-4">
+      <label class="block text-gray-700 font-medium">Subtasks</label>
+
+      <div *ngFor="let subtask of task.subtasks; let i = index" class="flex items-center gap-2 mt-1.5">
+        <input type="text" [(ngModel)]="task.subtasks[i].title" name="subtask-title-{{i}}"
+          placeholder="Subtask title"
+          class="p-0.5 border border-gray-300 rounded flex-1">
+
+        <select [(ngModel)]="task.subtasks[i].priority" name="subtask-priority-{{i}}"
+          class="pr-0 border border-gray-300 rounded">
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
+
+        <button type="button" (click)="removeSubtask(i)"
+          class="bg-red-500 px-0.5 text-white rounded">X</button>
+      </div>
+
+      <button type="button" (click)="addSubtask()"
+        class="mt-2 bg-gray-500 text-white px-3 py-1 rounded w-full">+ Add Subtask</button>
+    </div>
+
+    <button type="submit" (click)="postTask(task)" class="w-full bg-amber-600 text-white p-2 rounded">
+      Add Task
+    </button>
+  </form>
+   

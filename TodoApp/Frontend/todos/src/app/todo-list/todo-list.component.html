@@ -1,0 +1,85 @@
+<h2 class="text-2xl font-bold mb-4">Task List</h2>
+
+    <!-- Tag Filter Section -->
+    <!-- <div class="mb-4">
+      <button *ngFor="let tag of uniqueTags" (click)="filterTasks(tag)"
+        class="bg-blue-500 text-white px-3 py-1 rounded mx-1">
+        {{ tag }}
+      </button>
+      <button (click)="resetFilter()" class="bg-gray-500 text-white px-3 py-1 rounded">All</button>
+    </div> -->
+
+    <div *ngIf="isLoading" class="flex justify-center items-center h-[60vh]">
+      <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500 border-opacity-50"></div>
+    </div>
+
+    <!-- Scrollable Task List -->
+    <div *ngIf="!isLoading" class="max-h-[60vh] overflow-y-auto">
+      <div *ngFor="let task of tasks" class="mb-4 p-3 border rounded">
+
+        <!-- Task View Mode (When Not Editing) -->
+        <div *ngIf="editedTaskId !== task._id">
+          <h3 class="text-lg font-semibold">
+            <input type="checkbox" [checked]="task.completed" (change)="toggleTask(task)">
+            <span [class.line-through]="task.completed">{{ task.title }}</span>
+          </h3>
+          <p class="text-gray-600">{{ task.description }}</p>
+          
+          <!-- Tags Display -->
+          <div *ngIf="task.tags.length > 0" class="mt-1">
+            <span *ngFor="let tag of task.tags" class="text-xs bg-blue-200 px-2 py-1 rounded-full mr-1">
+              {{ tag }}
+            </span>
+          </div>
+
+          <!-- Subtasks Section -->
+          <div *ngIf="task.subtasks.length > 0" class="mt-2">
+            <h4 class="font-semibold">Subtasks</h4>
+            <ul class="list-disc pl-5 mt-1">
+              <li *ngFor="let subtask of task.subtasks">
+                <div class="flex justify-between items-center">
+                  <span>{{ subtask.title }}</span>
+                  <span class="ml-2 px-2 py-1 rounded text-xs" [ngClass]="{
+                    'bg-red-400': subtask.priority === 'high',
+                    'bg-yellow-400': subtask.priority === 'medium',
+                    'bg-green-400': subtask.priority === 'low'
+                  }">
+                    {{ subtask.priority }}
+                  </span>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Edit/Delete Buttons -->
+          <div>
+            <button class="bg-green-500 text-white px-3 py-1 rounded" (click)="editTask(task)">Edit</button>
+            <button class="bg-red-500 text-white px-3 py-1 rounded" (click)="deleteTask(task._id ?? '')">Delete</button>
+          </div>
+        </div>
+
+        <!-- Task Edit Mode (When Editing) -->
+        <div *ngIf="editedTaskId === task._id">
+          <input type="text" [(ngModel)]="editedTask.title" class="border p-2 rounded w-full">
+          <textarea [(ngModel)]="editedTask.description" class="border p-2 rounded w-full mt-2"></textarea>
+
+          <!-- Subtask Editing -->
+          <div class="mt-2">
+            <h4 class="font-semibold">Edit Subtasks</h4>
+            <div *ngFor="let subtask of task.subtasks; let i = index" class="flex gap-2 mt-2">
+              <input type="text" [(ngModel)]="task.subtasks[i].title" class="p-2 border rounded flex-1" placeholder="Subtask title">
+              <select [(ngModel)]="task.subtasks[i].priority" class="p-2 border rounded">
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Save and Cancel Buttons -->
+          <button class="bg-blue-500 text-white px-3 py-1 rounded mt-2" (click)="saveTask()">Save</button>
+          <button class="bg-gray-500 text-white px-3 py-1 rounded mt-2" (click)="cancelEdit()">Cancel</button>
+        </div>
+
+      </div>
+    </div>
