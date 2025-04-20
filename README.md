@@ -1,4 +1,4 @@
-# Todo App
+# Todo App (Angular, Tailwind CSS and Node.js)
 
 This project is a simple Todo application built with a backend REST API and an Angular frontend.
 
